@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: StatefulSet  #定义了名为 es-cluster 的 StatefulSet 对象
+metadata:
+  name: es-cluster
+  namespace: logging
+spec:
+  serviceName: elasticsearch # 和前面创建的 Service 相关联，这可以确保使用以下 DNS 地址访问 StatefulSet 中的每一个 Pod：es-cluster-[0,1,2].elasticsearch.logging.svc.cluster.local，其中[0,1,2]对应于已分配的 Pod 序号。
+  replicas: 1 #3个副本
+  selector:
+    matchLabels:
+      app: elasticsearch #设置匹配标签为app=elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec: #定义Pod模板
+      containers:
+      - name: elasticsearch
+        image: elasticsearch:7.4.2
+        resources:
+            limits:
+              cpu: 1000m
+            requests:
+              cpu: 100m
+        ports:
+        - containerPort: 9200
+          name: rest
+          protocol: TCP
+        - containerPort: 9300
+          name: inter-node
+          protocol: TCP
+        volumeMounts: #声明数据持久化目录
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        env: #定义变量
+          - name: cluster.name #Elasticsearch 集群的名称
+            value: k8s-logs
+          - name: node.name 
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: discovery.seed_hosts # 旧版本使用 discovery.zen.ping.unicast.hosts
+            value: "elasticsearch" # Disvocery Service
+          - name: cluster.initial_master_nodes # 初始化的 master 节点，旧版本相关配置 discovery.zen.minimum_master_nodes
+            value: "es-cluster-0" # 根据副本数和name配置
+          - name: ES_JAVA_OPTS #JVM限制
+            value: "-Xms512m -Xmx512m"
+      initContainers: #环境初始化容器
+      - name: fix-permissions
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"] 
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+      - name: increase-vm-max-map
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      - name: increase-fd-ulimit
+        image: busybox
+        command: ["sh", "-c", "ulimit -n 65536"]
+        securityContext:
+          privileged: true
+  volumeClaimTemplates: #定义持久化模板
+  - metadata:
+      name: data
+      labels:
+        app: elasticsearch
+    spec:
+      accessModes: [ "ReadWriteOnce" ] #设置访问模式，这意味着它只能被 mount 到单个节点上进行读写
+      storageClassName: es-data-db  #使用Storagerclass自动创建PV
+      resources:
+        requests:
+          storage: 5Gi #容量
+

@@ -1,0 +1,13 @@
+Name:         admin-user-token-l5nzr
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: dbb32376-7b79-4502-95f3-b2d138640f99
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1025 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWw1bnpyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJkYmIzMjM3Ni03Yjc5LTQ1MDItOTVmMy1iMmQxMzg2NDBmOTkiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.hkmgCOg9jLcWSkRvOGZ7tjUuZn11Mbq5I87JJcP5Z-c7Pne4Jsw_bRbBDXFCrtZOD8IxIdRdnI3SWAQpQuiuu9bpNRwwzLuHDQrcFxhJugBTF_xetXmrB2nuSXeYl1r1QMxPZrWNa7dDP2F9M9E1Zz63KPL1dw7ITiVcLfvyJXBzs_xn9BbBpbNH1kcx3YmxjRUtSmhuegBok_2IeAfd35e8hl82tttIjA73PFpACGnm8Y2Zrqnb0A4RNasBPxxlQZeW_CAppEM_xaHNFjq5yP3te8qszcyO4uQvq4DLYFXnmmJCjPJYV3IeW21BE355Uc9nHs0q6SStfsv6vVFwag
